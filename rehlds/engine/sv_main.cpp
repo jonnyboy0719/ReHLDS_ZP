@@ -1344,7 +1344,7 @@ void SV_WriteClientdataToMessage(client_t *client, sizebuf_t *msg)
 				};
 				if (g_eGameType == GT_CStrike || g_eGameType == GT_CZero)
 					convertGlobalGameTimeToLocal(std::ref(tdata->m_fAimedDamage));
-				if (g_eGameType == GT_HL1 || g_eGameType == GT_CStrike || g_eGameType == GT_CZero)
+				if (g_eGameType == GT_ZP || g_eGameType == GT_HL1 || g_eGameType == GT_CStrike || g_eGameType == GT_CZero)
 				{
 					convertGlobalGameTimeToLocal(std::ref(tdata->fuser2));
 					convertGlobalGameTimeToLocal(std::ref(tdata->fuser3));
@@ -6010,6 +6010,10 @@ void SetCStrikeFlags(void)
 		{
 			g_eGameType = GT_TFC;
 		}
+		else if (!Q_stricmp(com_gamedir, "zp"))
+		{
+			g_eGameType = GT_ZP;
+		}
 	}
 }
 
@@ -8536,18 +8540,19 @@ typedef struct GameToAppIDMapItem_s
 	const char *pGameDir;
 } GameToAppIDMapItem_t;
 
-GameToAppIDMapItem_t g_GameToAppIDMap[11] = {
-	{ 0x0A, "cstrike" },
-	{ 0x14, "tfc" },
-	{ 0x1E, "dod" },
-	{ 0x28, "dmc" },
-	{ 0x32, "gearbox" },
-	{ 0x3C, "ricochet" },
-	{ 0x46, "valve" },
-	{ 0x50, "czero" },
-	{ 0x64, "czeror" },
-	{ 0x82, "bshift" },
-	{ 0x96, "cstrike_beta" },
+GameToAppIDMapItem_t g_GameToAppIDMap[12] = {
+	{ 10, "cstrike" },
+	{ 20, "tfc" },
+	{ 30, "dod" },
+	{ 40, "dmc" },
+	{ 50, "gearbox" },
+	{ 60, "ricochet" },
+	{ 70, "valve" },
+	{ 80, "czero" },
+	{ 100, "czeror" },
+	{ 130, "bshift" },
+	{ 150, "cstrike_beta" },
+	{ 3825360, "zp" },
 };
 
 int GetGameAppID(void)
@@ -8555,7 +8560,7 @@ int GetGameAppID(void)
 	char arg[260];
 	char gd[260];
 
-	COM_ParseDirectoryFromCmd("-game", gd, "valve");
+	COM_ParseDirectoryFromCmd("-game", gd, "zp");
 	COM_FileBase(gd, arg);
 	for (int i = 0; i < ARRAYSIZE(g_GameToAppIDMap); i++)
 	{
@@ -8563,7 +8568,7 @@ int GetGameAppID(void)
 			return g_GameToAppIDMap[i].iAppID;
 	}
 
-	return 70;
+	return 3825360;
 }
 
 qboolean IsGameSubscribed(const char *gameName)

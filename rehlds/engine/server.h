@@ -396,6 +396,7 @@ enum GameType_e
 	GT_TerrorStrike,
 	GT_TFC,
 	GT_HL1,
+	GT_ZP,
 	GT_CStrike
 };
 
